@@ -15,6 +15,7 @@ import cn.myperf4j.base.http.HttpResponse;
 import cn.myperf4j.base.http.server.Dispatcher;
 import cn.myperf4j.base.http.server.SimpleHttpServer;
 import cn.myperf4j.base.metric.exporter.MethodMetricsExporter;
+import cn.myperf4j.base.util.Locks;
 import cn.myperf4j.base.util.concurrent.ExecutorManager;
 import cn.myperf4j.base.util.Logger;
 import cn.myperf4j.base.config.MyProperties;
@@ -430,15 +431,19 @@ public abstract class AbstractBootstrap {
     private boolean initHttpServer() {
         try {
             final HttpServerConfig config = ProfilingConfig.httpServerConfig();
-            final SimpleHttpServer server = new SimpleHttpServer.Builder()
-                    .port(choseHttpServerPort(config))
-                    .minWorkers(config.getMinWorkers())
-                    .maxWorkers(config.getMaxWorkers())
-                    .acceptCnt(config.getAcceptCount())
-                    .dispatcher(getHttpServerDispatch())
-                    .build();
-            server.startAsync();
-            return true;
+
+            return Locks.lockTmpdir("MyPerf4j", () -> {
+                final SimpleHttpServer server = new SimpleHttpServer.Builder()
+                        .port(choseHttpServerPort(config))
+                        .minWorkers(config.getMinWorkers())
+                        .maxWorkers(config.getMaxWorkers())
+                        .acceptCnt(config.getAcceptCount())
+                        .dispatcher(getHttpServerDispatch())
+                        .build();
+
+                server.start();
+                return true;
+            });
         } catch (Exception e) {
             Logger.error("AbstractBootstrap.initHttpServer()", e);
         }

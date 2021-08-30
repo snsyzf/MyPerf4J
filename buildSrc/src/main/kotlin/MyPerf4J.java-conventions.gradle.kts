@@ -12,7 +12,7 @@ repositories {
 
 group = "MyPerf4J"
 version = "3.3.0-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_1_7
+java.sourceCompatibility = JavaVersion.VERSION_1_8
 
 publishing {
     publications.create<MavenPublication>("maven") {
