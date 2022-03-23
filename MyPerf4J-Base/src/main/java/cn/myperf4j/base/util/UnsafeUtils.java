@@ -18,7 +18,7 @@ public final class UnsafeUtils {
     }
 
     private static Unsafe generateUnsafe() {
-        sun.misc.Unsafe unsafe = null;
+        Unsafe unsafe = null;
         try {
             unsafe = AccessController.doPrivileged(new PrivilegedExceptionAction<Unsafe>() {
                 @Override

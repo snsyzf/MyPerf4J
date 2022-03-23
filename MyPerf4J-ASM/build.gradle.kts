@@ -4,11 +4,13 @@ plugins {
 }
 
 dependencies {
-    implementation("org.ow2.asm:asm-commons:8.0.1")
-    implementation("org.ow2.asm:asm-util:8.0.1")
-    implementation("org.ow2.asm:asm-tree:8.0.1")
-    implementation("org.ow2.asm:asm-analysis:8.0.1")
+    implementation("org.ow2.asm:asm-commons:9.2") {
+        exclude(module = "asm-tree")
+        exclude(module = "asm-analysis")
+    }
     implementation(project(":MyPerf4J-Core"))
+
+    testImplementation("junit:junit:4.13.2")
 }
 tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
     this.isZip64 = true

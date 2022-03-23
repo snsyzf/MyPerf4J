@@ -35,7 +35,7 @@ public final class IntBufPool {
     }
 
     public static IntBufPool getInstance() {
-        return IntBufPool.IntBufPoolHolder.instance;
+        return IntBufPoolHolder.instance;
     }
 
     private IntBufPool() {
